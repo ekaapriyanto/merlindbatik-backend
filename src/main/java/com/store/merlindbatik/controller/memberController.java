@@ -155,14 +155,23 @@ public class memberController {
 	@GetMapping("/passwordchange/{userId}/{oldPassword}/{newPassword}")
 	public Member passwordChange(@PathVariable int userId, @PathVariable String oldPassword, @PathVariable String newPassword) {
 		Member findUser = memberRepo.findById(userId).get();
-		if(pwEncoder.matches(oldPassword, findUser.getPassword())) {
-			String encodedPassword = pwEncoder.encode(newPassword);
-			findUser.setPassword(encodedPassword);
-			Member savedUser = memberRepo.save(findUser);
-			savedUser.setPassword(null);
-			return savedUser;
+		
+		if(findUser.isVerified() == true) {
+			if(pwEncoder.matches(oldPassword, findUser.getPassword())) {
+				String encodedPassword = pwEncoder.encode(newPassword);
+				findUser.setPassword(encodedPassword);
+				Member savedUser = memberRepo.save(findUser);
+				savedUser.setPassword(null);
+				return savedUser;
+			}
+			throw new RuntimeException("Password not match");
 		}
-		throw new RuntimeException("Password not match");
+		throw new RuntimeException("Email doesn't Verified!");
+		
+		
+		
+		
+		
 	}
 	
 	//EditProfil
