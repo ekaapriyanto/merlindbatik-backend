@@ -118,7 +118,7 @@ public class memberController {
 		
 		if(findEmail.get().isVerified() == true) {
 			String verifyToken = pwEncoder.encode(findEmail.get().getEmail() + findEmail.get().getUsername());
-			String message =  "klik link ini untuk ganti password "+ "http://localhost:3000/changepassword/" + findEmail.get().getEmail()+"/"+ verifyToken;
+			String message =  "klik link ini untuk ganti password "+ "http://localhost:3000/changepassword/" + findEmail.get().getEmail()+"/"+ verifyToken.substring(15, 20);
 			emailUtil.sendEmail(findEmail.get().getEmail(), "Ganti Password", message);
 			return findEmail.get();
 		} 
@@ -167,11 +167,6 @@ public class memberController {
 			throw new RuntimeException("Password not match");
 		}
 		throw new RuntimeException("Email doesn't Verified!");
-		
-		
-		
-		
-		
 	}
 	
 	//EditProfil
@@ -216,6 +211,22 @@ public class memberController {
 		savedMember.setPassword(null);
 		return savedMember;
 	}
+	
+	//VerifayEmail
+	@GetMapping("/email/verify/{email}")
+	public String verifyUser(@PathVariable String email) {
+		Member findUsername = memberRepo.findByEmail(email).get();
+		
+		String linkToVerify = "http://localhost:8080/members/verify/" + findUsername.getUsername() + "?token=" + findUsername.getVerifyToken();
+		
+		String message = "<h1>Verifay Email</h1>\n";
+		message += "Klik <a href=\"" + linkToVerify + "\">link ini</a> untuk verifikasi email anda.";
+		
+		emailUtil.sendEmail(findUsername.getEmail(), "Registrasi Akun", message);
+		
+		return "Silahkan cek email untuk verify";
+	}
+	
 	
 	//GetMember
 	@GetMapping("/dataMember")
