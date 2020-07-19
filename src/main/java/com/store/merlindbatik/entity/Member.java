@@ -1,9 +1,16 @@
 package com.store.merlindbatik.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Member {
@@ -25,6 +32,11 @@ public class Member {
 	private String role;
 	private boolean isVerified;
 	private String verifyToken;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "member", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Cart> cart;
+	
 	public int getId() {
 		return id;
 	}
@@ -108,6 +120,12 @@ public class Member {
 	}
 	public void setVerifyToken(String verifyToken) {
 		this.verifyToken = verifyToken;
+	}
+	public List<Cart> getCart() {
+		return cart;
+	}
+	public void setCart(List<Cart> cart) {
+		this.cart = cart;
 	}
 	
 	

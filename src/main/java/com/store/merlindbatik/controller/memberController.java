@@ -208,4 +208,10 @@ public class memberController {
 		return savedMember;
 	}
 	
+	//GetMember
+	@GetMapping("/dataMember")
+	public Iterable <Member> getMember(){
+		return memberRepo.findAll();
+	}
+	
 }

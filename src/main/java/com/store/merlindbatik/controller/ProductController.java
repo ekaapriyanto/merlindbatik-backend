@@ -29,6 +29,12 @@ public class ProductController {
 		return productRepo.findAll();
 	}
 	
+	//new arrival
+	@GetMapping("/new")
+	public Iterable<Product> getNewArrival(){
+		return productRepo.findNewArrival();
+	}
+	
 	// Add Product
 	@PostMapping("/addproducts")
 	public Product addProduct(@RequestBody Product product) {
@@ -104,5 +110,20 @@ public class ProductController {
 		}
 		return productRepo.getCountProduct(minPrice, maxPrice, productName, category);
 	}
+	
+	//Report
+	@GetMapping("/report/{sort}/")
+	public Iterable<Product> getReportProduct(
+			@PathVariable String sort,
+			@RequestParam String productName,
+			@RequestParam String category){
+		if(sort.equals("asc")) {
+			return productRepo.findProducttoReportAsc(productName, category);
+		}
+		else {
+			return productRepo.findProducttoReportDesc(productName, category);
+		}
+	}
+	
 
 }

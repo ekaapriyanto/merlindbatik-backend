@@ -1,9 +1,16 @@
 package com.store.merlindbatik.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Product {
@@ -20,6 +27,13 @@ public class Product {
 	private int stockSizeL;
 	private String description;
 	private String image;
+	private int sold;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "product", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Cart> cart;
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -73,6 +87,19 @@ public class Product {
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+	
+	public int getSold() {
+		return sold;
+	}
+	public void setSold(int sold) {
+		this.sold = sold;
+	}
+	public List<Cart> getCart() {
+		return cart;
+	}
+	public void setCart(List<Cart> cart) {
+		this.cart = cart;
 	}
 	
 	
